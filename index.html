@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Birthday Paradox</title>
+<!-- MathJax for rendering LaTeX math formulas -->
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    margin: 0;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+}
+.content-wrapper {
+    max-width: 1067px;
+    width: 100%;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.text-content {
+    /* Keeps the essay text at a comfortable reading width */
+    max-width: 800px;
+    margin: 0 auto;
+}
+h1 {
+    color: #2c3e50;
+    margin-top: 0;
+    text-align: center;
+    font-size: 2.5em;
+}
+a {
+    color: #0366d6;
+}
+/* Plain indented proof blocks (no styling, just indentation) */
+.proof {
+    margin-left: 40px;
+}
+/* Numbered side notes from the margins */
+.footnote {
+    margin-left: 40px;
+    font-size: 0.92em;
+}
+/* Marginal issue note, kept in its original blue ink */
+.issue-note {
+    color: #1a73e8;
+}
+</style>
+</head>
+<body>
+<div class="content-wrapper">
+<div class="text-content">
+
+<h1>The Birthday Paradox</h1>
+
+<p>One day in office hours I asked my Probability Theory prof Sky Cao to tell me more about <a href="https://en.wikipedia.org/wiki/Birthday_problem">the (birthday) paradox</a>, which came up when I was reading more on finite fields, hoping to gain a sense of what might have already been done for dynamics on finite fields (specifically, Pollard's rho algorithm for discrete logarithms.) I really liked his explanation. With his permission, I've written an informal version down here.</p>
+
+<ul>
+<li>Suppose we have \(N\) balls and at each time step, randomly pick a ball with replacement.</li>
+<li>We denote the random variable \(T\) to return the timestep that is the first time a ball is picked twice.</li>
+<li>We are interested in the number of people that must be in a room for us to say there are &ldquo;probably&rdquo; 2 people who share the same birthday.</li>
+<li>The chance of 2 people sharing the same birthday is analogous to the chance of picking the same ball twice, with \(N = 365\).</li>
+<li>It turns out that \(T \sim N^{1/2}\), meaning the size of \(T\) is approximately \(N^{1/2}\).</li>
+<li>To prove \(T \sim N^{1/2}\), we must find an expression for \(1 - \mathbb{P}(T \leq k) = \mathbb{P}(T > k)\) in terms of \(N\) and \(k\), where \(k\) is some unknown function of \(N\).</li>
+</ul>
+
+<p>To verify that we can set \(k \sim N^{1/2}\), it suffices to check:</p>
+
+<div class="proof">
+<p>(1) when \(k \gg N^{1/2}\), we have \(\mathbb{P}(T > k) \sim 0\)<br>
+and<br>
+(2) when \(k \ll N^{1/2}\), we have \(\mathbb{P}(T > k) \sim 1\)</p>
+</div>
+
+<p>Then</p>
+
+\[ \mathbb{P}(T > k) \;\overset{(1)}{=}\; \frac{N \cdot (N-1) \cdots (N-(k-1))}{\underbrace{N \cdots N}_{k \text{ times}}} \]
+
+<p class="footnote">(1) \(\mathbb{P}(T > k)\) is the probability that we needed more than \(k\) times to get a repeat. This is the same as the probability that in the first \(k\) times, we did not get a repeat.</p>
+
+\[ = \left(\frac{N}{N}\right)\left(\frac{N-1}{N}\right) \cdots \left(\frac{N-(k-1)}{N}\right) \]
+
+\[ = 1\left(1 - \frac{1}{N}\right) \cdots \left(1 - \frac{k-1}{N}\right) \]
+
+\[ \overset{(2)}{\approx}\; \exp(0)\,\exp\!\left(-\frac{1}{N}\right) \cdots \exp\!\left(\frac{-k+1}{N}\right) \]
+
+<p class="footnote">(2) Observe that for \(|x| \ll 1\), we have the first order approximation \(e^x \approx 1 + x\) from the Taylor series of \(e^x\).</p>
+
+\[ = \exp\!\left(-\left(\frac{1}{N}\sum_{j=1}^{k-1} j\right)\right) \]
+
+\[ = \exp\!\left(-\frac{1}{N}\left(\tfrac{1}{2}k(k-1)\right)\right) \]
+
+<p>But now we see</p>
+
+<div class="proof">
+<p>\(\dfrac{1}{e^{k^2/N}} \to 0\) as \(e^{k^2/N} \to \infty\),<br>
+that is, as \(k \gg N^{1/2}\), as claimed</p>
+
+<p>\(\dfrac{1}{e^{k^2/N}} \to 1\) as \(e^{k^2/N} \to 1\),<br>
+that is, as \(k \ll N^{1/2}\) as claimed</p>
+
+<p class="issue-note">[issue: we stated \(1 \leq k \leq N\), this only works if \(k \to 0\), but \(1 \leq k\)?]</p>
+</div>
+
+<p><a href="https://sites.google.com/view/christinazhou/about?authuser=0">Back to my website</a></p>
+
+</div>
+</div>
+</body>
+</html>
